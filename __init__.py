@@ -26,11 +26,11 @@ class DDNIF_addon_prefs(bpy.types.AddonPreferences):
     )
 
     def draw(self, context):
-        pyncheck = addon_utils.check("io_scene_nifly")
+        pynifly_check = addon_utils.check("io_scene_nifly")
         layout = self.layout
 
         # Auto import option
-        if (pyncheck == (False, True)) or (pyncheck == (True, True)):
+        if (pynifly_check == (False, True)) or (pynifly_check == (True, True)):
             row = layout.row()
             row.separator(factor=0.5)
             row.prop(self, "auto_import", text="Automatically Import with Default Settings When a File is Dropped")
@@ -40,7 +40,7 @@ class DDNIF_addon_prefs(bpy.types.AddonPreferences):
         # Error message if PyNifly can't be found:
         else:
             # Text wrapping for message:
-            long_text = "PyNifly is either not installed, or not enabled in the Blender Preferences Add–ons list. This addon is dependent on PyNifly to function. The latest version of PyNifly can be found here:"
+            long_text = "PyNifly is either not installed or not enabled in the Blender Preferences Add–ons list. This addon is dependent on PyNifly to function. The latest version of PyNifly can be found here:"
 
             # Get the Preferences area
             for area in bpy.context.screen.areas:
@@ -57,14 +57,14 @@ class DDNIF_addon_prefs(bpy.types.AddonPreferences):
             max_width = int(panel_width // uifontscale)
 
             # Wrap text and put lines in a list
-            size = textwrap.TextWrapper(width=max_width)
-            wlist = size.wrap(text=long_text)
+            wrapping = textwrap.TextWrapper(width=max_width)
+            wrap_list = wrapping.wrap(text=long_text)
 
             # Static heading label
             layout.label(text="ERROR: Missing Dependency", icon= 'ERROR')
 
             # Dynamically wrapped text
-            for text in wlist:
+            for text in wrap_list:
                 row = layout.row(align=True)
                 row.scale_y = 0.4
                 row.label(text=text, icon='BLANK1')
@@ -113,9 +113,9 @@ class DDNIF_import_nif(bpy.types.Operator):
         # 'check' function returns a tuple of booleans --> (loaded_default, loaded_state)
         # loaded_default = True when the addon is enabled by default in startup file
         # loaded_state = True when the addon is currently enabled
-        pyncheck = addon_utils.check("io_scene_nifly")
+        pynifly_check = addon_utils.check("io_scene_nifly")
 
-        if (pyncheck == (False, True)) or (pyncheck == (True, True)):
+        if (pynifly_check == (False, True)) or (pynifly_check == (True, True)):
             # Check if default settings are automatically used for import
             if bpy.context.preferences.addons[__package__].preferences.auto_import:
                 print(
@@ -146,12 +146,12 @@ class DDNIF_import_nif(bpy.types.Operator):
         else:
             print(
                 "\nERROR: Drag and Drop NIF:\
-                \n    PyNifly is either not installed, or not enabled in the Blender Preferences Add-ons list.\
+                \n    PyNifly is either not installed or not enabled in the Blender Preferences Add-ons list.\
                 \n    The latest version of PyNifly can be found here:\
                 \n    https://github.com/BadDogSkyrim/PyNifly/releases/latest\
                 \n"
             )
-            self.report({'ERROR'}, "Drag & Drop NIF: \nPyNifly is either not installed, or not enabled!")
+            self.report({'ERROR'}, "Drag & Drop NIF: \nPyNifly is either not installed or not enabled!")
             return {'CANCELLED'}
 
         return {'FINISHED'}
