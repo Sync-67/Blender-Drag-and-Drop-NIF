@@ -90,7 +90,7 @@ class DDNIF_addon_prefs(bpy.types.AddonPreferences):
 class DDNIF_drag_and_drop_nif(bpy.types.FileHandler):
     bl_idname = "WM_FH_drag_and_drop_nif"
     bl_label = "Import NIF"
-    bl_import_operator = "wm.import_nif"
+    bl_import_operator = "wm.ddnif_import_nif"
     bl_file_extensions = ".nif"
 
     @classmethod
@@ -101,7 +101,7 @@ class DDNIF_drag_and_drop_nif(bpy.types.FileHandler):
 
 # Import file with PyNifly
 class DDNIF_import_nif(bpy.types.Operator):
-    bl_idname = "wm.import_nif"
+    bl_idname = "wm.ddnif_import_nif"
     bl_label = "Import NIF"
     bl_options = {'INTERNAL'}
 
